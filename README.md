@@ -14,15 +14,25 @@ Some figures in the article were produced in ArcGIS Pro. The codes here only sho
 ### Data source
 
 Cd: Tellus, Geological Survey Ireland (point, continous, Shapefile)
+
 Annual mean temperature: Copernicus Climate Change Service (C3S) Climate Data Store (CDS) (multidimensional, continuous, nc)
+
 Annual precipitation: Copernicus Climate Change Service (C3S) Climate Data Store (CDS) (multidimensional, continuous, nc)
+
 Bedrock: Geological Survey Ireland (vector, categorical, Shapefile)
+
 Industry: Open Street Map (point, identity, Shapefile)
+
 Road: Open Street Map (line, identity, Shapefile)
+
 Quarry: Open Street Map (point, identity, Shapefile)
+
 PIP_P: Ireland EPA Geoportal (vector, categorical, Shapefile)
+
 Soil tyoe: Ireland EPA Geoportal (vector, categorical, Shapefile)
+
 Land cover: Ireland EPA Geoportal (vector, categorical, Shapefile)
+
 
 ### Preprocessing
 
