@@ -43,14 +43,26 @@ In ArcGIS Pro, the maps were produced.
 ## Software and packages
 
 R 4.3.1
+
 RStudio
+
 randomForest 4.7-1.2
+
 ggplot2 3.5.1
+
 fastshap 0.1.0
+
 sf 1.0-19
+
 dplyr 1.1.3
+
 data.table 1.14.8
+
 foreach 1.5.2
+
 doParallel 1.0.17
+
 osmdata 0.2.5
+
 gstat 2.1-2
+
