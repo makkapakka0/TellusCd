@@ -15,11 +15,17 @@ Some figures in the article were produced in ArcGIS Pro. The codes here only sho
 
 Cd: Tellus, Geological Survey Ireland (point, continous, Shapefile)
 
+pH: Tellus, Geological Survey Ireland (point, continous, Shapefile)
+
+LOI: Tellus, Geological Survey Ireland (point, continous, Shapefile)
+
 Annual mean temperature: Copernicus Climate Change Service (C3S) Climate Data Store (CDS) (multidimensional, continuous, nc)
 
 Annual precipitation: Copernicus Climate Change Service (C3S) Climate Data Store (CDS) (multidimensional, continuous, nc)
 
 Bedrock: Geological Survey Ireland (vector, categorical, Shapefile)
+
+Elevation: Copernicus (raster, continous, tif)
 
 Industry: Open Street Map (point, identity, Shapefile)
 
