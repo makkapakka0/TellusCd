@@ -6,8 +6,7 @@ library(doParallel)
 library(gstat)
 
 
-df<-read.csv('D:\\telluscd\\all.csv')
-df<-df[,c('Cd','x','y','tp','tem','quarry','industry','road','PIPP','soiltype','lc','br500')]
+df<-read.csv('D:\\telluscd\\all3.csv')
 
 v<-variogram(Cd~1,data=df,locations=~x+y)
 plot(v)
@@ -35,7 +34,7 @@ results<-data.frame()
 
 for (i in ntree) {
   for (k in mtry){
-    rf<-randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br500,
+    rf<-randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br+LOI+pH+ele,
                      ntree=i,
                      mtry=k,
                      data=df)
@@ -82,11 +81,16 @@ for (b in seq(10000,60000,5000)){
     lat1 <- row$y
     
     window_data <- df2[sqrt((x-long1)^2+(y-lat1)^2)<b]
+    
+    if (nrow(window_data) < 3) {
+      return(data.table(pred = -999))
+    }
+    
     sample_weight<-(1-(sqrt((window_data$x-long1)^2+(window_data$y-lat1)^2)/b)^2)^2
     
-    local <- randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br500,
-                          ntree=400,
-                          mtry=2,
+    local <- randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br+LOI+pH+ele,
+                          ntree=350,
+                          mtry=3,
                           weights=sample_weight,
                           data = window_data)
     
@@ -95,7 +99,11 @@ for (b in seq(10000,60000,5000)){
     data.table(pred = pred)
   }
   
-  rmse<-sqrt(sum((results2$pred-df$Cd)^2)/nrow(df))
+  results2$Cd<-df$Cd
+  
+  results2<-results2[results2$pred>0,]
+  
+  rmse<-sqrt(sum((results2$pred-results2$Cd)^2)/nrow(results2))
   
   rmse<-data.frame(bandwidth=b,rmse=rmse)
   
@@ -109,13 +117,12 @@ stopCluster(cl)
 
 band<-read.csv('D:\\telluscd\\band.csv')
 
-
 ggplot(data=band,aes(x=bandwidth,y=rmse))+
   geom_jitter(size=4,height=0,width=0,alpha=0.5)+
   geom_smooth(method='loess',span=0.3,se=FALSE,color='red',linetype='solid',linewidth=1.5)+
-  ylim(0.60,0.65)+
+  ylim(0.57,0.63)+
   xlim(0,60000)+
-  xlab('Bandwidtth')+
+  xlab('Bandwidth (m)')+
   ylab('RMSE (mg/kg)')+
   theme(axis.text = element_text(size=24),
         axis.title = element_text(size=28),
@@ -124,11 +131,4 @@ ggplot(data=band,aes(x=bandwidth,y=rmse))+
         panel.grid.minor = element_line(colour = 'gray80'),
         axis.line = element_line(colour = 'black'))+
   ggsave('D:\\telluscd\\maps\\bandwidth.tiff',dpi=300,width=12,height=6)
-
-
-
-
-
-
-
 
