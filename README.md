@@ -3,7 +3,7 @@
 
 We use 9 environmental variables to model Cadmium (Cd) in the topsoil of Ireland based on Tellus dataset. Global random forest (RF) and local RF are applied. The models are interpreted using SHapley Additive exPlanations (SHAP) values to further explore the relationships between Cd and its factors, and the spatial patterns.
 
-The TellusCd is to model Cd using global RF and local RF, interpret the models using SHAP value, plot figures, and export results to GIS. The TellusCd_data is to collect industry and quarry data. The TellusCd_parameter is to select suitable parameters for the RF models and bandwidth for the local RF model. The TellusCd_validation is to validate the models.
+The TellusCd is to model Cd using global RF and local RF, interpret the models using SHAP value, plot figures, and export results to GIS. The TellusCd_data is to collect industry and quarry data. The TellusCd_parameter is to select suitable parameters for the RF models and bandwidth for the local RF model. The TellusCd_validation is to validate the models. The Tellus_res is to produce residuals for further analysis.
 
 Please note that the codes are not developed by a computer scientist. It may not provide the most efficient and clearest way. If you find anything to improve, please don't hesitate to contact me.
 
