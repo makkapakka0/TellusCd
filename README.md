@@ -1,5 +1,5 @@
 # TellusCd
-**R codes modelling Cd in Ireland using Tellus data**
+**R code modelling Cd in Ireland using Tellus data**
 
 We use 12 environmental variables to model Cadmium (Cd) in the topsoil of Ireland based on Tellus dataset. Random forest (RF) and geographically weighted random forest (GWRF) are applied. The models are interpreted using SHapley Additive exPlanations (SHAP) values to further explore the relationships between Cd and its factors, and the spatial patterns.
 
