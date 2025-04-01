@@ -54,14 +54,3 @@ quarry_points<-st_as_sf(quarry_points,coords='geometry',crs=4326)
 st_write(quarry_points,'D:\\telluscd\\quarry\\point.shp',append=FALSE)
 
 
-
-
-
-
-
-
-
-
-
-
-
