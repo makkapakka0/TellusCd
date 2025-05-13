@@ -41,7 +41,7 @@ merge$tem<-merge$tem-273.15
 merge$tp<-merge$tp*3600*24*365*1000
 
 ggplot(merge,aes(x=tp,y=tp_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.5,1.5)+
   xlim(800,2000)+
@@ -57,7 +57,7 @@ ggplot(merge,aes(x=tp,y=tp_s))+
   ggsave('D:\\telluscd\\maps\\tpshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=tem,y=tem_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.5,1)+
   xlim(7,11)+
@@ -73,7 +73,7 @@ ggplot(merge,aes(x=tem,y=tem_s))+
   ggsave('D:\\telluscd\\maps\\temshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=quarry,y=quarry_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,5)+
@@ -90,7 +90,7 @@ ggplot(merge,aes(x=quarry,y=quarry_s))+
 
 
 ggplot(merge,aes(x=industry,y=industry_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,30)+
@@ -106,7 +106,7 @@ ggplot(merge,aes(x=industry,y=industry_s))+
   ggsave('D:\\telluscd\\maps\\industryshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=road,y=road_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,30)+
@@ -122,7 +122,7 @@ ggplot(merge,aes(x=road,y=road_s))+
   ggsave('D:\\telluscd\\maps\\roadshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=pH,y=pH_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.25,1.25)+
   xlim(2,8)+
@@ -138,7 +138,7 @@ ggplot(merge,aes(x=pH,y=pH_s))+
   ggsave('D:\\telluscd\\maps\\phshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=LOI,y=LOI_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.25,1.25)+
   xlim(0,100)+
@@ -154,7 +154,7 @@ ggplot(merge,aes(x=LOI,y=LOI_s))+
   ggsave('D:\\telluscd\\maps\\loishap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge,aes(x=ele,y=ele_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,600)+
@@ -362,7 +362,7 @@ merge2$tem<-merge2$tem-273.15
 merge2$tp<-merge2$tp*3600*24*365*1000
 
 ggplot(merge2,aes(x=tp,y=tp_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.5,1.5)+
   xlim(800,2000)+
@@ -378,7 +378,7 @@ ggplot(merge2,aes(x=tp,y=tp_s))+
   ggsave('D:\\telluscd\\maps\\tplshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=tem,y=tem_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.5,1)+
   xlim(7,11)+
@@ -394,7 +394,7 @@ ggplot(merge2,aes(x=tem,y=tem_s))+
   ggsave('D:\\telluscd\\maps\\temlshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=quarry,y=quarry_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,5)+
@@ -410,7 +410,7 @@ ggplot(merge2,aes(x=quarry,y=quarry_s))+
   ggsave('D:\\telluscd\\maps\\quarrylshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=industry,y=industry_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,30)+
@@ -426,7 +426,7 @@ ggplot(merge2,aes(x=industry,y=industry_s))+
   ggsave('D:\\telluscd\\maps\\industrylshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=road,y=road_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,30)+
@@ -442,7 +442,7 @@ ggplot(merge2,aes(x=road,y=road_s))+
   ggsave('D:\\telluscd\\maps\\roadlshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=pH,y=pH_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.25,1.25)+
   xlim(2,8)+
@@ -458,7 +458,7 @@ ggplot(merge2,aes(x=pH,y=pH_s))+
   ggsave('D:\\telluscd\\maps\\phlshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=LOI,y=LOI_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.25,1.25)+
   xlim(0,100)+
@@ -474,7 +474,7 @@ ggplot(merge2,aes(x=LOI,y=LOI_s))+
   ggsave('D:\\telluscd\\maps\\loilshap.tiff',dpi=300,width=10,height=6)
 
 ggplot(merge2,aes(x=ele,y=ele_s))+
-  geom_jitter(size=0.8,height=0,width=0,alpha=0.2)+
+  geom_point(size=0.8,alpha=0.2)+
   geom_smooth(method='loess',span=0.1,se=TRUE,color='red',linetype='solid',linewidth=1.5)+
   ylim(-0.2,1)+
   xlim(0,600)+
