@@ -5,28 +5,10 @@ library(foreach)
 library(doParallel)
 library(gstat)
 
-
+#Read data
 df<-read.csv('D:\\telluscd\\all3.csv')
-
-v<-variogram(Cd~1,data=df,locations=~x+y)
-plot(v)
-
-ggplot(data=v,aes(x=dist,y=gamma))+
-  geom_jitter(size=4,height=0,width=0,alpha=0.5)+
-  geom_smooth(method='loess',span=0.9,se=FALSE,color='red',linetype='solid',linewidth=1.5)+
-  ylim(0.3,0.6)+
-  xlim(0,125000)+
-  xlab('Distance')+
-  ylab('Semivariance')+
-  theme(axis.text = element_text(size=24),
-        axis.title = element_text(size=28),
-        panel.border = element_rect(colour = 'black',fill=NA,size=2),
-        panel.grid.major = element_line(colour = 'gray80'),
-        panel.grid.minor = element_line(colour = 'gray80'),
-        axis.line = element_line(colour = 'black'))+
-  ggsave('D:\\telluscd\\maps\\semi.tiff',dpi=300,width=12,height=6)
   
-  
+#RF parameters - Grid search and OOBRMSE
 ntree<-c(100,150,200,250,300,350,400,450,500)
 mtry<-c(1,2,3,4,5,6)
 
@@ -61,60 +43,53 @@ ggplot(results,aes(x=ntree,y=mtry,color=rmse,size=rmse))+
         legend.text = element_text(size = 18))+
   ggsave('D:\\telluscd\\maps\\gridsearch.tiff',dpi=300,width = 10, height=6)
 
-
+#GWRF parameters - Leave-one-out cross validation
 setDT(df)
-
-# Add indices on `long` and `lat` columns
 setkey(df, x, y)
-
 numCores <- detectCores() - 1
 cl <- makeCluster(numCores)
 registerDoParallel(cl)
 
 param<-data.frame()
 
-for (b in seq(10000,60000,5000)){
+for (b in seq(4000,40000,1000)){
   results2 <- foreach(i = 1:nrow(df), .combine = rbind, .packages = c('randomForest', 'data.table')) %dopar% {
     row <- df[i]
     df2<-df[-i]
     long1 <- row$x
     lat1 <- row$y
-    
+    #Local dataset
     window_data <- df2[sqrt((x-long1)^2+(y-lat1)^2)<b]
-    
+    #Avoid some models are not properly trained due to small dataset
     if (nrow(window_data) < 3) {
       return(data.table(pred = -999))
     }
-    
+    #Sample weight
     sample_weight<-(1-(sqrt((window_data$x-long1)^2+(window_data$y-lat1)^2)/b)^2)^2
-    
+    #Local model
     local <- randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br+LOI+pH+ele,
                           ntree=350,
                           mtry=3,
                           weights=sample_weight,
                           data = window_data)
-    
     pred<-predict(local,row)
-    
+    #Save predicted data
     data.table(pred = pred)
   }
-  
+  #Add raw data
   results2$Cd<-df$Cd
-  
+  #Remove -999
   results2<-results2[results2$pred>0,]
-  
+  #RMSE
   rmse<-sqrt(sum((results2$pred-results2$Cd)^2)/nrow(results2))
-  
+  #Save to dataframe
   rmse<-data.frame(bandwidth=b,rmse=rmse)
-  
   param<-rbind(param,rmse)
 }
 
-# Parallel processing with foreach
-
-# Stop the cluster
 stopCluster(cl)
 
+#The for loop causes memory issue on my PC, thus I do it individually
 band<-read.csv('D:\\telluscd\\band.csv')
 
 ggplot(data=band,aes(x=bandwidth,y=rmse))+
@@ -131,4 +106,3 @@ ggplot(data=band,aes(x=bandwidth,y=rmse))+
         panel.grid.minor = element_line(colour = 'gray80'),
         axis.line = element_line(colour = 'black'))+
   ggsave('D:\\telluscd\\maps\\bandwidth.tiff',dpi=300,width=12,height=6)
-
