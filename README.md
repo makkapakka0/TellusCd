@@ -1,13 +1,13 @@
 # TellusCd
 **R code modelling Cd in Ireland using Tellus data**
 
-We use 12 environmental variables to model Cadmium (Cd) in the topsoil of Ireland based on Tellus dataset. Random forest (RF) and geographically weighted random forest (GWRF) are applied. The models are interpreted using SHapley Additive exPlanations (SHAP) values to further explore the relationships between Cd and its factors, and the spatial patterns.
+We used 12 variables to model Cadmium (Cd) in the topsoil of Ireland based on Tellus dataset. Random forest (RF), geographically weighted random forest (GWRF) were applied. The GWRF was integrated with Z-score normalization (GWRF-Z) and Local Moran's I (GWRF-LISA) to remove to outlier effect. The models were interpreted using SHapley Additive exPlanations (SHAP) values to further explore the relationships between Cd and its factors, and the spatial patterns.
 
-The TellusCd is to model Cd using RF and GWRF, interpret the models using SHAP value, plot figures, and export results to GIS. The TellusCd_data is to collect industry and quarry data. The TellusCd_parameter is to select suitable parameters for the RF models and bandwidth for the GWRF model. The TellusCd_validation is to validate the models. The Tellus_res is to produce residuals for further analysis.
+The TellusCd is to model Cd using the models, interpret the models using SHAP value, plot figures, and export results to GIS. The TellusCd_data is to collect industry and quarry data. The TellusCd_parameter is to select suitable parameters for the RF and bandwidth for the GWRF model. The TellusCd_validation is to validate the models. The Tellus_res is to produce residuals for further analysis, which is not shown in the paper.
 
-Please note that the codes are not developed by a computer scientist. It may not provide the most efficient and clearest way. If you find anything to improve, please don't hesitate to contact me.
+Please note that the code is not developed by a computer scientist. It may not provide the most efficient and clearest way. If you find anything to improve, please don't hesitate to contact me.
 
-Some figures in the article were produced in ArcGIS Pro. The codes here only show steps in R.
+Some figures in the article were produced in ArcGIS Pro.
 
 ## Workflow
 
@@ -42,15 +42,15 @@ Land cover: Ireland EPA Geoportal (vector, categorical, Shapefile)
 
 ### Preprocessing
 
-The mean values of Annual mean temperature and Annual precipitation were calculated. The kernel densities of Indusrty, Road, and Quarry were calculated. All raster data were resampled to 1km*1km resolution. The environmental variables were extracted to Cd points in ArcGIS Pro and a table was exported. Rows with na value were deleted.
+The mean values of Annual mean temperature and Annual precipitation were calculated. The kernel densities of Indusrty, Road, and Quarry were calculated. All raster data were resampled to 1km*1km resolution. The variables were extracted to Cd points in ArcGIS Pro and a table was exported. Rows with na value were deleted.
 
 ### Select parameters
 
-Grid search and OOB RMSE were used to select suitable parameters for the RF models. Leave-one-out cross-validation was used to select a suitable bandwidth for the GWRF model. A semivariogram was also produced.
+Grid search and OOB RMSE were used to select suitable parameters for the RF. A semivariogram was produced. Leave-one-out cross-validation was used to select a suitable bandwidth for the GWRF, GWRF-LISA, and GWRF-Z based on the semivariogram. 
 
 ### Analysis
 
-The RF was fitted using the selected parameters. The GWRF was fitted using the selected bandwidth. SHAP values were calculated. The results were merged, plotted, and exported as Shapefiles. 
+The models were fitted with the suitable parameters. SHAP values were calculated. The results were exported as Shapefiles. 
 
 ### Mapping
 
@@ -82,3 +82,4 @@ osmdata 0.2.5
 
 gstat 2.1-2
 
+spdep 1.3-11
