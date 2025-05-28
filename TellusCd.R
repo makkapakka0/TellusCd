@@ -40,6 +40,24 @@ ggplot(df,aes(x=Cd))+
 #Read processed Cd data
 df<-read.csv('D:\\telluscd\\all3.csv')
 
+#Semivariogram
+v<-variogram(Cd~1,data=df,locations=~x+y)
+plot(v)
+ggplot(data=v,aes(x=dist,y=gamma))+
+  geom_jitter(size=4,height=0,width=0,alpha=0.5)+
+  geom_smooth(method='loess',span=0.9,se=FALSE,color='red',linetype='solid',linewidth=1.5)+
+  ylim(0.3,0.6)+
+  xlim(0,125000)+
+  xlab('Distance')+
+  ylab('Semivariance')+
+  theme(axis.text = element_text(size=24),
+        axis.title = element_text(size=28),
+        panel.border = element_rect(colour = 'black',fill=NA,size=2),
+        panel.grid.major = element_line(colour = 'gray80'),
+        panel.grid.minor = element_line(colour = 'gray80'),
+        axis.line = element_line(colour = 'black'))+
+  ggsave('D:\\telluscd\\maps\\semi.tiff',dpi=300,width=12,height=6)
+
 # Global RF model
 rf<-randomForest(Cd~tp+tem+quarry+industry+road+PIPP+soiltype+lc+br+pH+LOI+ele,
                  ntree=350,
