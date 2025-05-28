@@ -44,15 +44,11 @@ ggplot(densityplot,aes(x=Observed,y=Predicted))+
 
 
 setDT(df)
-
-# Add indices on `long` and `lat` columns
 setkey(df, x, y)
-
 numCores <- detectCores() - 1
 cl <- makeCluster(numCores)
 registerDoParallel(cl)
 
-# Parallel processing with foreach
 pred4000 <- foreach(i = 1:nrow(df), .combine = rbind, .packages = c('randomForest', 'data.table')) %dopar% {
   row <- df[i]
   long1 <- row$x
@@ -66,7 +62,6 @@ pred4000 <- foreach(i = 1:nrow(df), .combine = rbind, .packages = c('randomFores
                         mtry=3,
                         weights=sample_weight,
                         data = window_data)
-  
   pred<-predict(local,row)
   
   data.table(pred = pred)
@@ -86,6 +81,9 @@ names(results_p)<-c('pred4000','pred4500','pred5000','pred5500','pred6000',
                     'pred35000','pred40000')
 
 merge<-cbind(df,results_p)
+
+output<-st_as_sf(merge,coords=c('x','y'),crs=2157)
+st_write(output,'D:\\telluscd\\working\\res_g.shp',append=FALSE)
 
 densityplot<-data.frame(df$Cd,results)
 names(densityplot)<-c('Observed','Predicted')
@@ -109,26 +107,3 @@ ggplot(densityplot,aes(x=Observed,y=Predicted))+
         panel.grid.minor = element_line(colour = 'gray80'),
         axis.line = element_line(colour = 'black'))+
   ggsave('D:\\telluscd\\maps\\densitynstl.tiff',dpi=300,width=10,height=6)
-
-
-output<-st_as_sf(merge,coords=c('x','y'),crs=2157)
-#save as shapefile
-st_write(output,'D:\\telluscd\\working\\res_g.shp',append=FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
