@@ -1569,5 +1569,122 @@ merge2<-cbind(df,results2,results$pred,results$localr)
 
 #save as shapefile
 output<-st_as_sf(merge2,coords=c('x','y'),crs=2157)
+
+#how many times each sample used in modelling
+
+df<-read.csv('D:\\telluscd\\all3.csv')
+
+df$ID<-1:nrow(df)
+
+numCores <- detectCores() - 1
+cl <- makeCluster(numCores)
+registerDoParallel(cl)
+setDT(df)
+
+#Z-score
+indices_list <- foreach(i = 1:nrow(df), .combine = 'c', .packages = 'data.table') %dopar% {
+  long1 <- df$x[i]
+  lat1 <- df$y[i]
+  
+  window_data <- df[sqrt((x - long1)^2 + (y - lat1)^2) < 7500]
+  window_data$z_scores <- scale(log(window_data$Cd))
+  window_data <- window_data[abs(window_data$z_scores) <= 3, ]
+  
+  list(window_data$ID)
+}
+
+total_list <- foreach(i = 1:nrow(df), .combine = 'c', .packages = 'data.table') %dopar% {
+  long1 <- df$x[i]
+  lat1 <- df$y[i]
+  
+  window_data <- df[sqrt((x - long1)^2 + (y - lat1)^2) < 7500]
+  
+  list(window_data$ID)
+}
+
+stopCluster(cl)
+
+window_indices <- unlist(indices_list)
+window_count <- table(window_indices)
+
+total_indices<-unlist(total_list)
+total_count<-table(total_indices)
+
+df$count <- 0
+df$count[as.numeric(names(window_count))] <- as.integer(window_count)
+
+df$total<-0
+df$total[as.numeric(names(total_count))] <- as.integer(total_count)
+
+df$ratio<-df$count/df$total
+
+output<-st_as_sf(df,coords=c('x','y'),crs=2157)
+st_write(output,'D:\\telluscd\\working\\appearcount.shp',append=FALSE)
+
+ggplot(df,aes(x=Cd,y=count))+
+  geom_point(size=0.8,alpha=0.2)+
+  ylim(0,180)+
+  xlim(0,15)+
+  xlab('Cd (mg/kg)')+
+  ylab('Count')+
+  theme_minimal()+
+  theme(axis.text = element_text(size=24),
+        axis.title = element_text(size=28),
+        panel.border = element_rect(colour = 'black',fill=NA,size=2),
+        panel.grid.major = element_line(colour = 'gray80'),
+        panel.grid.minor = element_line(colour = 'gray80'),
+        axis.line = element_line(colour = 'black'))+
+  ggsave('D:\\telluscd\\maps\\count.tiff',dpi=300,width=10,height=6)
+
+ggplot(df,aes(x=Cd,y=ratio))+
+  geom_point(size=0.8,alpha=0.2)+
+  ylim(0,1)+
+  xlim(0,15)+
+  xlab('Cd (mg/kg)')+
+  ylab('Ratio')+
+  theme_minimal()+
+  theme(axis.text = element_text(size=24),
+        axis.title = element_text(size=28),
+        panel.border = element_rect(colour = 'black',fill=NA,size=2),
+        panel.grid.major = element_line(colour = 'gray80'),
+        panel.grid.minor = element_line(colour = 'gray80'),
+        axis.line = element_line(colour = 'black'))+
+  ggsave('D:\\telluscd\\maps\\count_ratio.tiff',dpi=300,width=10,height=6)
+
+#LISA
+df<-read.csv('D:\\telluscd\\all3.csv')
+df_sf<-st_as_sf(df,coords = c('x','y'),crs=2157)
+
+coords<-st_coordinates(df_sf)
+nb<-dnearneigh(coords,d1=0,d2=7500)
+lw<-nb2listw(nb,style = 'W')
+local_moran<-localmoran(log(df_sf$Cd),lw)
+
+df$Ii<-local_moran[,'Ii']
+df$p<-local_moran[,5]
+
+df<-df%>%
+  mutate(flag=ifelse(df$Ii>0 | df$p>0.05,1,0))
+
+ggplot(df,aes(x=Cd,y=flag))+
+  geom_point(size=0.8,alpha=0.2)+
+  ylim(-0.2,1.2)+
+  xlim(0,15)+
+  xlab('Cd (mg/kg)')+
+  ylab('Count')+
+  theme_minimal()+
+  theme(axis.text = element_text(size=24),
+        axis.title = element_text(size=28),
+        panel.border = element_rect(colour = 'black',fill=NA,size=2),
+        panel.grid.major = element_line(colour = 'gray80'),
+        panel.grid.minor = element_line(colour = 'gray80'),
+        axis.line = element_line(colour = 'black'))+
+  ggsave('D:\\telluscd\\maps\\count_lisa.tiff',dpi=300,width=10,height=6)
+
+output<-st_as_sf(df,coords=c('x','y'),crs=2157)
+st_write(output,'D:\\telluscd\\working\\appearcount_lisa.shp',append=FALSE)
+
+
 st_write(output,'D:\\telluscd\\working\\lshapfinal300.shp',append=FALSE)
+
 
